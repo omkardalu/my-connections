@@ -1,9 +1,9 @@
 import { useRef } from "react";
 
 const Dashboard = () => {
-  
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
   const submitText = useRef('Submit');
-
+  
   const handleSubmit = async(e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
@@ -11,7 +11,7 @@ const Dashboard = () => {
     submitText.current.disabled = true;
     const name = formData.get("name");
 
-    const response = await fetch('http://localhost:8000/api/v1/submit',{
+    const response = await fetch(`${backendUrl}/api/v1/submit`,{
       method:'POST',
       headers:{
         "Content-Type":"application/json",
@@ -19,7 +19,6 @@ const Dashboard = () => {
       body: JSON.stringify({name}),
     });
     const data = await response.json();
-    console.log(data);
     
     if(data.success){
       submitText.current.innerText ='Submited';
