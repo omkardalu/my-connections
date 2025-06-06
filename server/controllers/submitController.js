@@ -12,7 +12,6 @@ exports.handleSubmit = async(req, res) => {
     }
     
     const newEntry = await submission.create({name});
-    console.log(name);
 
     res.status(201).json({
       success: true,
