@@ -1,0 +1,18 @@
+@keyframes dot-loading {
+  0%{
+    width: 10px;
+    margin-left: 1px;
+  }
+  50%{
+    width: 100px;
+    margin-left: 100px;
+  }
+  100%{
+    margin-left: auto;
+  }
+}
+
+
+.loader-animation{
+  animation: dot-loading 3s infinite;
+}

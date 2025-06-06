@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import SubmissionsCard from '../components/SubmissionCard.jsx';
-const NamesBoard = () => {
+const NamesBoard = ({setIsLoading, isLoading}) => {
   const [ submissions, setSubmissions ] = useState();
   
   useEffect(() => {
     try{
       const backendUrl = import.meta.env.VITE_BACKEND_URL;
       const getAllSubmissions = async () => {
+        setIsLoading(true);
         const response = await fetch(`${backendUrl}/api/v1/allsubmissions`, {
           method: "GET",
           headers: {
@@ -20,6 +21,7 @@ const NamesBoard = () => {
         }
 
         setSubmissions(submissionsData.submissions);
+        setIsLoading(false);
       };
 
       getAllSubmissions();
@@ -27,7 +29,6 @@ const NamesBoard = () => {
       console.log(e);
     }
   }, []);
-  console.log(submissions);
   
   if (!submissions) return 'Loading...';
   return (
