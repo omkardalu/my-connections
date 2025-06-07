@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import SubmissionsCard from '../components/SubmissionCard.jsx';
-const NamesBoard = ({setIsLoading, isLoading}) => {
+const NamesBoard = ({setIsLoading, setEdit}) => {
   const [ submissions, setSubmissions ] = useState();
   
   useEffect(() => {
@@ -34,7 +34,7 @@ const NamesBoard = ({setIsLoading, isLoading}) => {
   return (
   <section id="namesBoard" className="flex items-center justify-center flex-col  p-4 m-4 border-amber-50 border-2">
     {submissions.map((submission, index) => {
-      return <SubmissionsCard key={index} name={submission.name} time={submission.submittedAt} />
+      return <SubmissionsCard setEdit={setEdit} key={index} id={submission._id} name={submission.name} time={submission.submittedAt} />
     })}
   </section>
   )

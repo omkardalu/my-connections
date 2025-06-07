@@ -1,8 +1,9 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
-const SubmissionForm = ({setIsLoading}) => {
+const SubmissionForm = ({ edit, setEdit, setIsLoading }) => {
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
   const submitText = useRef("Submit");
+  const [name, setName] = useState();
 
   const handleSubmit = async (e) => {
     setIsLoading(true);
@@ -12,13 +13,18 @@ const SubmissionForm = ({setIsLoading}) => {
     submitText.current.disabled = true;
     const name = formData.get("name");
 
-    const response = await fetch(`${backendUrl}/api/v1/submit`, {
-      method: "POST",
+    const fetchUrl = edit
+      ? `${backendUrl}/api/v1/submit/${edit.id}`
+      : `${backendUrl}/api/v1/submit`;
+
+    const response = await fetch(fetchUrl, {
+      method: edit ? "PUT" : "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ name }),
     });
+
     const data = await response.json();
 
     if (data.success) {
@@ -29,8 +35,10 @@ const SubmissionForm = ({setIsLoading}) => {
     setIsLoading(false);
   };
   return (
-    <form className="flex flex-col items-center justify-center" onSubmit={handleSubmit}>
-
+    <form
+      className="flex flex-col items-center justify-center"
+      onSubmit={handleSubmit}
+    >
       <div className="p-4">
         <label htmlFor="name">Your name: </label>
         <input
@@ -38,19 +46,23 @@ const SubmissionForm = ({setIsLoading}) => {
           type="text"
           required
           name="name"
+          value={name || edit?.name}
+          onChange={(e) => {
+            setName(e.target.value);
+          }}
           placeholder="Enter your name"
           className="p-1 px-2 border-2 text-gray-500 border-blue-400 rounded-lg"
         />
       </div>
 
       <div>
-        
         <button
           className="bg-gray-100 p-2 px-4 rounded-lg m-2 text-gray-400 hover:bg-gray-200"
           type="reset"
           onClick={() => {
             submitText.current.innerText = "Submit";
             submitText.current.disabled = false;
+            setName('');
           }}
         >
           Clear
